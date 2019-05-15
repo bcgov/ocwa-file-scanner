@@ -1,0 +1,19 @@
+{
+    "name": "ocwa-file-scanner",
+    "version": "1.1.0",
+    "main": "src/index.js",
+    "license": "MIT",
+    "scripts": {
+    },
+    "devDependencies": {
+    },
+    "dependencies": {
+      "minio": "^7.0.1",
+      "nconf": "0.10.0",
+      "npmlog": "4.1.2",
+      "request": "2.88.0",
+      "walk": "2.3.14"
+    }
+
+  }
+  
