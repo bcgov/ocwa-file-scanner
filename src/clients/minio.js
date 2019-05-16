@@ -36,4 +36,24 @@ miniocli.upload = (path, fname) => {
     });
 }
 
+miniocli.putObject = (path, data) => {
+
+    return new Promise((resolve, reject) => {
+        var cleanName = path.rreplaceAll('\/|\\.', '-');
+
+        var metaData = {
+            'Content-Type': 'application/octet-stream',
+            'full-path': path,
+            'Filename' : path
+        }
+
+        minioClient.putObject(config.get('storage:bucket'), cleanName, data, null, metaData, function(err, etag) {
+            if (err) {
+                return reject(err);
+            }
+            resolve(cleanName);
+        });
+    });
+}
+
 module.exports = miniocli;
