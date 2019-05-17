@@ -35,7 +35,7 @@ validateapi.status = (files) => {
 
             if (Object.keys(status).length !== files.length){
                 logger.error("Not all files were submitted for validation, did you let save finish?");
-                return;
+                return reject();
             }
 
             var count = 0;

@@ -13,7 +13,7 @@ scanner.upload = (fileName, fileData) => {
     return minio.putObject(fileName, fileData);
 }
 
-scanner.results = (fileIds) => {
+scanner.results = (fileIds, frequency) => {
     logger.notice("RESULTS");
 
     const check = require('../src/check');
@@ -23,18 +23,23 @@ scanner.results = (fileIds) => {
         logger.notice("git-file-scanner", "SCANNING " + fid + "");
     });
 
+    check.config_frequency(frequency);
+
     return new Promise((resolve, reject) => {
 
         validateapi.validate(fids).then (() => {
-            check.synccheck(fids, 1).then(() => {
-                resolve();
+            check.synccheck(fids, 1).then((result) => {
+                resolve(result);
             }). catch (err => {
-                logger.error("git-file-scanner", "Unexpected error", err);
-                reject(err);
+                if (err.status == "error") {
+                    reject(err);
+                } else {
+                    resolve(err);
+                }
             })
         }).catch(err => {
             logger.error("git-file-scanner", "Giving up... error calling validation service.", err);
-            reject(err);
+            reject({status:"error",message:err});
         });
     });
 }
