@@ -60,7 +60,7 @@ validateapi.status = (files) => {
                 }
             }
             logger.notice('validateapi', "Passed=%j, Blocked=%j, Pending=%j, Queued=%j", pass, blocked, pending, count);
-            if (blocked) {
+            if (pending == 0 && blocked) {
                 return reject(status);
             }
             resolve(pass);
