@@ -16,7 +16,7 @@ scanner.upload = (fileName, fileData) => {
 }
 
 scanner.results = (fileIds, frequency) => {
-    logger.notice("RESULTS");
+    logger.verbose("RESULTS FOR ", fileIds);
 
     const check = require('../src/check');
     const fids = fileIds.split(' ');
@@ -30,7 +30,7 @@ scanner.results = (fileIds, frequency) => {
     return new Promise((resolve, reject) => {
 
         check.synccheck(fids, 1).then((result) => {
-            //logger.notice("Returning" + JSON.stringify(result));
+            logger.verbose("Returning " + JSON.stringify(result));
             resolve(result);
         }). catch (err => {
             if (err.status == "error") {

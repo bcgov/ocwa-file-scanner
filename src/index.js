@@ -3,6 +3,7 @@ const logger = require('npmlog');
 const nconf = require('nconf');
 const minio = require('./clients/minio');
 const validateapi = require('./clients/validateapi');
+const uuidv1 = require('uuid/v1');
 const walk = require('walk');
 const fs = require('fs');
 let walker;
@@ -20,7 +21,8 @@ walker.on("file", function (root, fileStats, next) {
         return next();
     }
 
-    minio.upload(root + "/" + fileStats.name, fileStats.name).then((fid) => {
+
+    minio.upload(root + "/" + fileStats.name, uuidv1() + "/" + fileStats.name).then((fid) => {
         fileIds[fid] = root + "/" + fileStats.name;
         next();
     }).catch (err => {
@@ -33,21 +35,32 @@ walker.on("errors", function (root, nodeStatsArray, next) {
     process.exit(1);
 });
 
+function synccheck (fids, tries) {
+    const check = require('./check');
+    check.synccheck(fids, 1).then((result) => {
+        logger.notice("Result: "+JSON.stringify(result));
+        if (result.status == "waiting") {
+            setTimeout(synccheck, 100, fids, 1);
+        } else {
+            process.exit(0);
+        }
+    }). catch (err => {
+        logger.error(err);
+        process.exit(1);
+    })
+
+}
+
 walker.on("end", function () {
 
-    const check = require('./check');
     const fids = Object.keys(fileIds);
 
     fids.map(fid => {
-        logger.notice("git-file-scanner", "SCANNING " + fileIds[fid] + "");
+        logger.notice("git-file-scanner", "SCANNING " + fileIds[fid]);
     });
 
-    validateapi.validate(fids).then (() => {
-        check.synccheck(fids, 1).then(() => {
-            process.exit(0);
-        }). catch (err => {
-            process.exit(1);
-        })
+    validateapi.validate_all(fids).then (() => {
+        synccheck(fids, 1);
     }).catch(err => {
         logger.error("git-file-scanner", "Giving up... error calling validation service.", err);
         process.exit(1);

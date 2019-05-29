@@ -14,3 +14,10 @@ curl -v http://localhost:4000/api/v1/upload -X POST -H "Authorization: Api-Key 5
 curl -v http://localhost:4000/api/v1/results -X POST -H "Authorization: Api-Key 582AUpdU6gyJHZGWzciseHwqjc170b" -d 'filenames=Dockerfile' -d 'frequency=10000'
 
 ```
+
+
+## Running recursive scan
+
+```
+docker run -vi --rm --net=ocwa_vnet -p 4000:3000 -v `pwd`:/work -v `pwd`/config.json:/app/config/default.json ocwa-file-scanner ocwa-scanner /work
+```

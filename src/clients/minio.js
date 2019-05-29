@@ -19,11 +19,11 @@ String.prototype.rreplaceAll = function(search, replacement) {
 miniocli.upload = (path, fname) => {
 
     return new Promise((resolve, reject) => {
-        var cleanName = path.rreplaceAll('\/|\\.', '-');
+        var cleanName = fname.rreplaceAll('\/|\\.', '-');
 
         var metaData = {
             'Content-Type': 'application/octet-stream',
-            'full-path': path,
+            'full-path': fname,
             'Filename' : fname
         }
 
@@ -36,15 +36,15 @@ miniocli.upload = (path, fname) => {
     });
 }
 
-miniocli.putObject = (path, data) => {
+miniocli.putObject = (filename, data) => {
 
     return new Promise((resolve, reject) => {
-        var cleanName = path.rreplaceAll('\/|\\.', '-');
+        var cleanName = filename.rreplaceAll('\/|\\.', '-');
 
         var metaData = {
             'Content-Type': 'application/octet-stream',
-            'full-path': path,
-            'Filename' : path
+            'full-path': filename,
+            'Filename' : filename
         }
 
         minioClient.putObject(config.get('storage:bucket'), cleanName, data, null, metaData, function(err, etag) {

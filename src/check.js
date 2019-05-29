@@ -16,9 +16,9 @@ check.synccheck = (fids, tries) => {
 }
 
 check.check = (fids, tries, resolve, reject) => {
-    if (tries == 5) {
-        logger.error("git-file-scanner", "Giving up... files were not validated so considering it a fail!");
+    if (tries == 6) {
         resolve({status:'waiting', message:'timed out waiting for validation'});
+        return;
     }
 
     validateapi.status(fids).then(pass => {
