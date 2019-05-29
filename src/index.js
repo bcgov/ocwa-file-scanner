@@ -35,10 +35,13 @@ walker.on("errors", function (root, nodeStatsArray, next) {
     process.exit(1);
 });
 
-function synccheck (fids, tries) {
+function poll_for_results (fids) {
+
     const check = require('./check');
+
     check.synccheck(fids, 1).then((result) => {
         logger.notice("Result: "+JSON.stringify(result));
+
         if (result.status == "waiting") {
             setTimeout(synccheck, 100, fids, 1);
         } else {
@@ -60,7 +63,7 @@ walker.on("end", function () {
     });
 
     validateapi.validate_all(fids).then (() => {
-        synccheck(fids, 1);
+        poll_for_results(fids);
     }).catch(err => {
         logger.error("git-file-scanner", "Giving up... error calling validation service.", err);
         process.exit(1);

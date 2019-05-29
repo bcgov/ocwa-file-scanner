@@ -5,12 +5,13 @@ const nconf = require('nconf');
 
 const minio = require('../src/clients/minio');
 const validateapi = require('../src/clients/validateapi');
+const uuidv1 = require('uuid/v1');
 
 var scanner = {}
 
 scanner.upload = (fileName, fileData) => {
     logger.notice("UPLOAD");
-    return minio.putObject(fileName, fileData).then (fid => {
+    return minio.putObject(uuidv1() + "/" + fileName, fileData).then (fid => {
         return validateapi.validate(fid);
     });
 }
