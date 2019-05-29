@@ -43,7 +43,7 @@ function poll_for_results (fids) {
         logger.notice("Result: "+JSON.stringify(result));
 
         if (result.status == "waiting") {
-            setTimeout(synccheck, 100, fids, 1);
+            setTimeout(poll_for_results, 100, fids, 1);
         } else {
             process.exit(0);
         }
