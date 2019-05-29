@@ -3,7 +3,7 @@ const validateapi = require('./clients/validateapi');
 
 var check = {}
 
-check.frequency = 10000;
+check.frequency = 2000;
 
 check.config_frequency = (frequency) => {
     check.frequency = frequency;
@@ -16,9 +16,9 @@ check.synccheck = (fids, tries) => {
 }
 
 check.check = (fids, tries, resolve, reject) => {
-    if (tries == 100) {
+    if (tries == 5) {
         logger.error("git-file-scanner", "Giving up... files were not validated so considering it a fail!");
-        reject({status:'error', message:'timed out waiting for validation'});
+        resolve({status:'waiting', message:'timed out waiting for validation'});
     }
 
     validateapi.status(fids).then(pass => {

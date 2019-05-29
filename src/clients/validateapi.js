@@ -5,7 +5,26 @@ const util = require('./util');
 
 let validateapi = {}
 
-validateapi.validate = (files) => {
+validateapi.validate = (myFile) => {
+    return new Promise((resolve, reject) => {
+        httpReq.put({
+            url: config.get('validationapi') + '/v1/validate/' + myFile,
+            headers: {
+                'x-api-key': config.get('validationapisecret')
+            }
+        }, function (apiErr, apiRes, body) {
+            logger.verbose("put file " + myFile + " up for validation");
+            if (apiErr) {
+                logger.error("Error validating file: ", apiErr);
+                return reject(apiErr);
+            } else {
+                resolve(myFile);
+            }
+        });
+    });
+}
+
+validateapi.validate_all = (files) => {
     return new Promise((resolve, reject) => {
         for (var i=0; i<files.length; i++) {
             var myFile = files[i];

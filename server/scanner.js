@@ -10,7 +10,9 @@ var scanner = {}
 
 scanner.upload = (fileName, fileData) => {
     logger.notice("UPLOAD");
-    return minio.putObject(fileName, fileData);
+    return minio.putObject(fileName, fileData).then (fid => {
+        return validateapi.validate(fid);
+    });
 }
 
 scanner.results = (fileIds, frequency) => {
@@ -27,19 +29,15 @@ scanner.results = (fileIds, frequency) => {
 
     return new Promise((resolve, reject) => {
 
-        validateapi.validate(fids).then (() => {
-            check.synccheck(fids, 1).then((result) => {
-                resolve(result);
-            }). catch (err => {
-                if (err.status == "error") {
-                    reject(err);
-                } else {
-                    resolve(err);
-                }
-            })
-        }).catch(err => {
-            logger.error("git-file-scanner", "Giving up... error calling validation service.", err);
-            reject({status:"error",message:err});
+        check.synccheck(fids, 1).then((result) => {
+            //logger.notice("Returning" + JSON.stringify(result));
+            resolve(result);
+        }). catch (err => {
+            if (err.status == "error") {
+                reject(err);
+            } else {
+                resolve(err);
+            }
         });
     });
 }
