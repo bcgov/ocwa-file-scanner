@@ -1,5 +1,7 @@
 # ocwa-file-scanner
 
+Integrates with OCWA for managing bulk scanning of files.
+
 ## Getting Started
 
 
