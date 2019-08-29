@@ -1,16 +1,17 @@
 language: node_js
-
 services:
-  - docker
-
+- docker
 jobs:
   include:
-    - stage: deploy
-      install:
-      - docker build -t bcgovimages/ocwa-file-scanner .
-      provider: script
-      script: bash docker_push || travis_terminate 1
-      on:
-        all_branches: true
-        condition: "$TRAVIS_BRANCH =~ ^master|develop$ || -n $TRAVIS_TAG"  
-
+  - stage: deploy
+    install:
+    - docker build -t bcgovimages/ocwa-file-scanner .
+    provider: script
+    script: bash docker_push || travis_terminate 1
+    on:
+      all_branches: true
+      condition: "$TRAVIS_BRANCH =~ ^master|develop$ || -n $TRAVIS_TAG"
+env:
+  global:
+  - secure: aSQgiWbh+mdeb6/1AbOlPLDfGQ178nBSN7POKsHR2KwlyE++0aCTN4Hv1Itje+UDMv+QvOD+8W5VswxDxcaIXHHCoLMemShRhP9xK0YjwqlmRXTffSIie+FDUKl6kcNGfbY4yDnXX5vUmQ9YO1tgcUKBd4x0HZkWOS7tNJidn2PJQpX9DQ1NvK4fKOH/HI4JUfp/18IEzPZpa4rZeIXMTvN3XILl+XAHiIetOKl8ZazmjexgBlisPdLDp3BX3D7pgOQsLgQHKyelHy/zWQdNRzchaH6J9at1yqAMdDRqXVWrWJEfRUzgtGBpaGosmxfvXvDDQpPScUl77yIbz9ew1U5zVMUyS5zdwgLdlJNAh8kc4AUYCq+oTsbjbJ/UkyJJ+AsukA4mkLmY2LEFE7Pe7FeRucp4szObPk/7u5Tqb9d0elxWtfKXPMDQsUjKdhpUb3e7VVX5YUj2tVz+KB1UYwvACyCDh0H167sB37pbL68/gRcUkoVWs6Kg130zHkEua/kzFp/R4T9Qe90lzKJ8NV+t1wr4CxX05mDu6m7VAoEd+w8VAASVE3BQnKOllmBX5alVx/8Ojf6VTmAMp21XqI99wB3sqrkHQER+q6GLGaYbl7sFWPTsTT+6WnSOS366hu+GD0jjohlIe32vqJSF6y2M4Eu18Xnw41A2mVVgUos=
+  - secure: AsISuMpzGx+Z8khjdMLIbbrofvvH4ozQFeytFZim5Sech6Kw/7nnwFR2OepUdO5hyudWwWZsjvaLMGnTtUdSkbAmEPBMKLqRwq0HGCyhKjWewty2UXhI53TnBQl1pb61myz3l4SYfSJUSvO29ccR1DEnJQNcsWmeyITJ+MakG9RE/4dT1nGFsoQQf4GsO4HDKf5agb3mjQ8YI0MqDMwHLzNIiXUaE1v/tpDUwJ9P28Zu/v5N/WvshqjoSQbOHCTh67y76Eo5fx2rrH5g+mWoqCDFgtFWOAgH3Tp1rklZW7XO47HdG1CBXEJE/GQg8z72mCW3DM4SFf/jJZHnh4xnK4B/RlPQe7VGN14HKNEjQ8i8SJOSjqcbsA0CmngruEN6/EVzotiaq/91FKiZhKREjV+5A+y6RabI4XLEuOaq8d3wKcrBJrvwMDBIcaSQnKZPvVHCkmVSPAJLbZFlo3WDYr0W4WFNrd+vCWQkoBu58Jn08RE0PPfm6HrrMbjISk/ojZT2ZaL+rbXm9GR5T2BOOuZnKihZwHq64x4vQfpqvx/jJ56EXuS/ZvIpppStZVIQx2qqw9PQtbMDSIWbnTrn0eVMqbavmVVsJG4EZ0QMLZszzZYM77o1g20FAFVx+sJujcsuTBlcVRpLXx20wOb6yciGQB5zi6cic+iH0/MBvFk=
