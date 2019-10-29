@@ -10,11 +10,11 @@ let walker;
 
 const folder = nconf.get("source");
     
-Object.keys(process.env).forEach((e) => {
-    logger.notice("ENV ", e, " = ", process.env[e]);
-});
+// Object.keys(process.env).forEach((e) => {
+//     logger.notice("ENV ", e, " = ", process.env[e]);
+// });
 
-let envvars = ["CI_DEFAULT_BRANCH", "CI_MERGE_REQUEST_SOURCE_BRANCH_NAME", "CI_MERGE_REQUEST_TARGET_BRANCH_NAME"]
+let envvars = ["CI_COMMIT_REF_NAME", "CI_COMMIT_REF_SLUG", "CI_BUILD_REF_NAME"]
 
 envvars.forEach((e) => {
     logger.notice("ENV ", e, " = ", process.env[e]);
@@ -22,7 +22,7 @@ envvars.forEach((e) => {
 
 let policy = 'export-code';
 
-if ('CI_MERGE_REQUEST_TARGET_BRANCH_NAME' in process.env && process.env['CI_MERGE_REQUEST_SOURCE_BRANCH_NAME'].endsWith('-incoming')) {
+if ('CI_COMMIT_REF_NAME' in process.env && process.env['CI_COMMIT_REF_NAME'].endsWith('-incoming')) {
     policy = 'import-code'
     logger.notice("Policy DETECTED to be: ", policy);
 } else {
@@ -73,8 +73,6 @@ function poll_for_results (fids) {
 }
 
 walker.on("end", function () {
-
-    logger.error("git-file-scanner", "Policy: ", policy);
 
     const fids = Object.keys(fileIds);
 
