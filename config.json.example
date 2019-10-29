@@ -1,0 +1,14 @@
+{
+    "apikey": "",
+    "storage": {
+        "endpoint": "ocwaminio",
+        "port": 9000,
+        "usessl": false,
+        "bucket": "bucket",
+        "accesskey": "",
+        "secretkey": ""
+    },
+    "validationapi": "http://ocwa_validate_api:3003",
+    "validationapisecret": "",
+    "source": "/work"
+}

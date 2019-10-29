@@ -16,8 +16,8 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 
 app.post('/api/v1/upload', (req, res) => {
-    logger.notice(req.body.filename);
-    scanner.upload (req.body.filename, req.body.file).then (fid => {
+    logger.notice("upload", "Filename:%s Policy:%s", req.body.filename, req.body.policy);
+    scanner.upload (req.body.filename, req.body.policy, req.body.file).then (fid => {
         res.send({id: fid});
     }).catch (err => {
         res.status(500);

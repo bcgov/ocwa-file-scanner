@@ -5,10 +5,10 @@ const util = require('./util');
 
 let validateapi = {}
 
-validateapi.validate = (myFile) => {
+validateapi.validate = (myFile, policy) => {
     return new Promise((resolve, reject) => {
         httpReq.put({
-            url: config.get('validationapi') + '/v1/validate/' + myFile,
+            url: config.get('validationapi') + '/v1/validate/' + myFile + '/' + policy,
             headers: {
                 'x-api-key': config.get('validationapisecret')
             }
@@ -24,12 +24,12 @@ validateapi.validate = (myFile) => {
     });
 }
 
-validateapi.validate_all = (files) => {
+validateapi.validate_all = (files, policy) => {
     return new Promise((resolve, reject) => {
         for (var i=0; i<files.length; i++) {
             var myFile = files[i];
             httpReq.put({
-                url: config.get('validationapi') + '/v1/validate/' + myFile,
+                url: config.get('validationapi') + '/v1/validate/' + myFile + '/' + policy,
                 headers: {
                     'x-api-key': config.get('validationapisecret')
                 }

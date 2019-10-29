@@ -9,10 +9,10 @@ const uuidv1 = require('uuid/v1');
 
 var scanner = {}
 
-scanner.upload = (fileName, fileData) => {
+scanner.upload = (fileName, policy, fileData) => {
     logger.notice("UPLOAD");
     return minio.putObject(uuidv1() + "/" + fileName, fileData).then (fid => {
-        return validateapi.validate(fid);
+        return validateapi.validate(fid, policy);
     });
 }
 
